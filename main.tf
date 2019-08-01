@@ -1,6 +1,6 @@
 
 terraform {
-  required_version = ">= 0.12.0"
+  required_version = ">= 0.12.6"
   required_providers {
     dyn = ">= 1.0.0"
   }
@@ -22,12 +22,14 @@ locals {
 }
 
 resource "dyn_record" "this" {
-  count = length(local.records)
+  for_each = {
+    for r in local.records : "${r.name} ${r.type} ${r.data}" => r
+  }
 
   zone = var.zone_name
 
-  name  = coalesce(local.records[count.index].name, "@")
-  type  = local.records[count.index].type
-  ttl   = local.records[count.index].ttl
-  value = local.records[count.index].data
+  name  = coalesce(each.value.name, "@")
+  type  = each.value.type
+  ttl   = each.value.ttl
+  value = each.value.data
 }

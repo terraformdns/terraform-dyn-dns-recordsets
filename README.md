@@ -59,9 +59,3 @@ cause recordsets to be removed and replaced by the next plan.
   recordset format.
 
 This module requires the `dyn` provider.
-
-Due to current limitations of the Terraform language, recordsets in Dyn
-are correlated to `recordsets` elements using the index into the
-`recordsets` list. Adding or removing records from the list will therefore
-cause this module to also update all records with indices greater than where
-the addition or removal was made.
